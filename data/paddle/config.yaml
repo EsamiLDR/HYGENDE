@@ -1,0 +1,75 @@
+task_name: paddle
+
+prompt_templates:
+  observations:
+    multi_content: |
+      A tweet written by a user suspected of suffering from depression is the following: "${content}"
+      The answer whether the user is suffering from depression or not is: ${label}.
+
+  few_shot_prefix: |
+    Here are some examples:
+
+  batched_generation:
+    system: |-
+      You're a professional psychiatrist major in depression. 
+      Given a set of tweets, we want to generate hypotheses that are useful for predicting whether the tweet is written by a user who is suffering from depression.
+      Using the given examples, please propose ${num_hypotheses} possible hypotheses.
+      These hypotheses should identify specific patterns that occur across the provided tweets.
+      Please generate them in the format of:
+      1. [hypothesis]
+      2. [hypothesis]
+      ...
+      ${num_hypotheses}. [hypothesis]
+      Each hypothesis must be a descriptive sentence longer than 5 characters.
+      Please make the hypotheses general enough to be applicable to new observations.
+
+    user: |-
+      We made some observations: ${observations}
+      Please generate hypotheses that are useful for predicting whether a tweet is written by a depressed user.
+      Propose ${num_hypotheses} possible hypotheses.
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Each hypothesis must be a descriptive sentence longer than 5 characters.
+      Proposed hypotheses:
+
+  few_shot_baseline:
+    system: |-
+      You're a professional psychiatrist major in depression.
+      Given a tweet, you are asked to determine whether this tweet is written by a user who is suffering from depression.
+      Give an answer. The answer should be one word (yes or no).
+      No justification or description is needed. 
+      
+      Please format your final answer strictly as follows, as this format is crucial for our workflow: 
+      Final answer: yes or no
+      (e.g. Final answer: yes)
+
+    user: |-
+      ${few_shot_prefix}${observations}
+      A tweet written by a user suspected of suffering from depression is the following: "${content}". Is this user depressed or not?
+      Answer:
+
+  inference:
+    system: |-
+      You're a professional psychiatrist major in depression and you need to determine whether a tweet is written by a depressed user.
+      From past experiences, you learned some patterns. 
+      Now, you need to apply the learned pattern to a new tweet and predict whether the user who wrote this tweet is suffering from depression or not.
+      Give an answer. Please output your final determination at the very end in the strict format: 'Final answer: [yes/no].
+      
+      Please format your final answer strictly as follows, as this format is crucial for our workflow: 
+      First step: 
+      Second step: 
+      Third step: 
+      Final answer: [yes/no]
+      (e.g. Final answer: yes)
+
+    user: |-
+      Our learned patterns:
+      ${hypothesis}                          
+      
+      A tweet written by a user suspected of suffering from depression is the following: "${content}". Is this user depressed or not?
+
+      Given the patterns listed above, give an answer of whether the user is depressed or not.
+      Think step by step.
+      First step: Think about which pattern can be applied to the tweet.
+      Second step: Analyze the text details in the tweet.
+      Third step: Based on the pattern, is this user depressed or not?
+      Final step: Give your final answer.
