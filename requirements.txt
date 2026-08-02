@@ -1,0 +1,10 @@
+torch>=2.0.0
+transformers>=4.38.0
+sentence-transformers>=2.2.2
+pyyaml>=6.0
+scikit-learn>=1.2.0
+tqdm>=4.65.0
+numpy>=1.24.0
+openai>=1.12.0
+accelerate>=0.26.0
+vllm>=0.8.5
