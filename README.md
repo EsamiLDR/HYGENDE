@@ -1,4 +1,4 @@
-# New_Hygende
+# Hygende
 
 HyGende is a lightweight project for hypothesis-driven LLM evaluation and inference on text classification datasets. It supports a three-stage workflow:
 - Baseline evaluation using zero-shot or few-shot prompting.
